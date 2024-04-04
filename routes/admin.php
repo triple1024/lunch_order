@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Admin\Auth\EmailVerificationNotificationController;
@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth:admin', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -52,7 +52,7 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:admin')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 

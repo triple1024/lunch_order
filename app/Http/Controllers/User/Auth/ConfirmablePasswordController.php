@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\User\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class ConfirmablePasswordController extends Controller
      */
     public function show(): View
     {
-        return view('auth.confirm-password');
+        return view('user.auth.confirm-password');
     }
 
     /**
@@ -24,7 +25,7 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        if (! Auth::guard('web')->validate([
+        if (! Auth::guard('user')->validate([
             'email' => $request->user()->email,
             'password' => $request->password,
         ])) {
@@ -35,6 +36,6 @@ class ConfirmablePasswordController extends Controller
 
         $request->session()->put('auth.password_confirmed_at', time());
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route(RouteServiceProvider::HOME, absolute: false));
     }
 }
